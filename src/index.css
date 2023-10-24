@@ -1,0 +1,19 @@
+:where(.css-dev-only-do-not-override-xu9wm8).ant-image .ant-image-img {
+  height: 250px !important;
+}
+
+:where(
+    .css-dev-only-do-not-override-xu9wm8
+  ).ant-upload-wrapper.ant-upload-picture-card-wrapper
+  .ant-upload.ant-upload-select,
+:where(
+    .css-dev-only-do-not-override-xu9wm8
+  ).ant-upload-wrapper.ant-upload-picture-circle-wrapper
+  .ant-upload.ant-upload-select {
+  height: 380px !important;
+  width: 100% !important;
+}
+
+img {
+  object-fit: cover;
+}
