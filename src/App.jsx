@@ -8,12 +8,14 @@ import SkillsPage from "./pages/admin/skills";
 
 import AdminLayout from "./components/layout/admin";
 
-import { authName } from "./redux/slices/auth";
 import FrontLayout from "./components/layout/public";
 import RegisterPage from "./pages/public/register";
 import ExperiencesPage from "./pages/admin/experiences";
 import EducationPage from "./pages/admin/education";
 import PortfoliosPage from "./pages/admin/portfolios";
+import UsersPage from "./pages/admin/users";
+
+import { authName } from "./redux/slices/auth";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state[authName]);
@@ -38,6 +40,7 @@ function App() {
           }
         >
           <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="users" element={<UsersPage />} />
           <Route path="skills" element={<SkillsPage />} />
           <Route path="experiences" element={<ExperiencesPage />} />
           <Route path="education" element={<EducationPage />} />

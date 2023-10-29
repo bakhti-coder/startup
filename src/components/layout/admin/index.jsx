@@ -1,11 +1,15 @@
 import { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import {
+  AppstoreOutlined,
+  BankOutlined,
+  BookOutlined,
+  LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
-  UploadOutlined,
+  PieChartOutlined,
+  ThunderboltOutlined,
   UserOutlined,
-  VideoCameraOutlined,
 } from "@ant-design/icons";
 
 import { Layout, Menu, Button, theme, Modal } from "antd";
@@ -38,31 +42,36 @@ const AdminLayout = () => {
           items={[
             {
               key: "/dashboard",
-              icon: <UserOutlined />,
+              icon: <PieChartOutlined />,
               label: <Link to="/dashboard">Dashboard</Link>,
             },
             {
+              key: "/users",
+              icon: <UserOutlined />,
+              label: <Link to="/users">Users</Link>,
+            },
+            {
               key: "/skills",
-              icon: <VideoCameraOutlined />,
+              icon: <ThunderboltOutlined />,
               label: <Link to="/skills">Skills</Link>,
             },
             {
               key: "/portfolios",
-              icon: <UploadOutlined />,
+              icon: <AppstoreOutlined />,
               label: <Link to="/portfolios">Portfolios</Link>,
             },
             {
               key: "/experiences",
-              icon: <UploadOutlined />,
+              icon: <BankOutlined />,
               label: <Link to="/experiences">Experiences</Link>,
             },
             {
               key: "/education",
-              icon: <UploadOutlined />,
+              icon: <BookOutlined />,
               label: <Link to="/education">Education</Link>,
             },
             {
-              icon: <UploadOutlined />,
+              icon: <LogoutOutlined />,
               label: (
                 <Button
                   danger

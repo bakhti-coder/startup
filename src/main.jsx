@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
-import StoreProvider from "./redux/store";
+
+import StoreProvider from "./redux/store/index.jsx";
 
 import "antd/dist/reset.css";
 import "./index.css";

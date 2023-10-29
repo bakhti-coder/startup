@@ -17,3 +17,23 @@
 img {
   object-fit: cover;
 }
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+a {
+  text-decoration: none;
+}
+li {
+  list-style-type: none;
+}
+section {
+  padding-top: 70px;
+}
+
+@media screen and (max-width: 660px) {
+  section {
+    padding-top: 100px !important;
+  }
+}

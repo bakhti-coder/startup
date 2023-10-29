@@ -55,6 +55,9 @@ const PortfoliosPage = () => {
 
   const showModal = () => {
     setIsModalOpen(true);
+    form.resetFields();
+    setPhoto(null);
+    setSelected(null);
   };
 
   const closeModal = () => {
@@ -96,7 +99,7 @@ const PortfoliosPage = () => {
     setSelected(id);
     setIsModalOpen(true);
     const { payload } = await dispatch(getPortfolio(id));
-    console.log();
+    setPhoto(payload?.photo);
     form.setFieldsValue(payload);
   };
 
