@@ -10,10 +10,13 @@ import {
   Table,
   Avatar,
   Upload,
+  Checkbox,
+  Select,
 } from "antd";
 
 import { LIMIT } from "../../../constants";
 import {
+  useChangeRoleUsersMutation,
   useCreateUsersMutation,
   useDeleteUsersMutation,
   useGetOneUsersMutation,
@@ -23,37 +26,50 @@ import {
 } from "../../../redux/queries/users";
 import { userImage } from "../../../utils/getImage";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+
+import "./style.scss";
 
 const UsersPage = () => {
   const [form] = Form.useForm();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selected, setSelected] = useState(null);
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
   const [isModalLoading, setIsModalLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [loadingButtonId, setLoadingButtonId] = useState(null);
   const [photoLoading, setPhotoLoading] = useState(false);
   const [photo, setPhoto] = useState(null);
+  const [loadingRole, setLoadingRole] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [role, setRole] = useState("all");
+
+  // if (role === "all") {
+  // }
 
   const {
     data: { users, total } = { users: [], total: 0 },
     isFetching,
     refetch,
-  } = useGetUsersQuery({ page, search });
+  } = useGetUsersQuery({
+    page,
+    search,
+    role: role !== "all" ? role : undefined,
+  });
 
   const [createUsers] = useCreateUsersMutation();
   const [getOneUsers] = useGetOneUsersMutation();
   const [uploadPhoto] = useUploadPhotoMutation();
   const [updateUsers] = useUpdateUsersMutation();
   const [deleteUsers] = useDeleteUsersMutation();
+  const [changeRoleUser] = useChangeRoleUsersMutation();
 
   const showModal = () => {
     setIsModalOpen(true);
-    form.resetFields();
-    setSelected(null);
     setPhoto(null);
+    setSelected(null);
+    form.resetFields();
   };
 
   const closeModal = () => {
@@ -103,15 +119,37 @@ const UsersPage = () => {
   };
 
   const handlePhoto = async (e) => {
+    setPhoto(null);
     try {
       setPhotoLoading(true);
       let formData = new FormData();
       formData.append("file", e.file.originFileObj);
-      const { data } = await uploadPhoto(formData);
+      const { data } = await uploadPhoto(formData).unwrap();
       setPhoto(data);
     } finally {
       setPhotoLoading(false);
     }
+  };
+
+  const changeRole = async (id, e) => {
+    try {
+      setLoadingRole(true);
+      if (e) {
+        const client = "client";
+        await changeRoleUser({ id, body: client }).unwrap();
+        refetch();
+      } else {
+        const user = "user";
+        await changeRoleUser({ id, body: user }).unwrap();
+        refetch();
+      }
+    } finally {
+      setLoadingRole(false);
+    }
+  };
+
+  const handleChange = (value) => {
+    setRole(value);
   };
 
   const columns = [
@@ -146,15 +184,20 @@ const UsersPage = () => {
       title: "Action",
       dataIndex: "_id",
       key: "_id",
-      render: (id) => (
+      render: (id, row) => (
         <Space size="middle">
-          <Button
-            className="bg-primary"
-            type="primary"
-            onClick={() => handleEdit(id)}
+          {/* {roleIdLoading === id && loadingRole ? (
+            "Loading..."
+          ) : ( */}
+          <Checkbox
+            checked={row.role === "user" ? false : true}
+            disabled={row.role === "admin" || loadingRole}
+            onChange={(e) => changeRole(row._id, e.target.checked)}
           >
-            Change role
-          </Button>
+            Change role {row.role === "user" ? "client" : "user"}
+          </Checkbox>
+          {/* )} */}
+
           <Button
             className="bg-primary"
             type="primary"
@@ -164,6 +207,7 @@ const UsersPage = () => {
           </Button>
           {loadingButtonId === id ? (
             <Button
+              disabled={row.role === "admin" ? true : false}
               className="bg-primary"
               type="primary"
               danger
@@ -173,7 +217,12 @@ const UsersPage = () => {
               Delete
             </Button>
           ) : (
-            <Button type="primary" danger onClick={() => handleDelete(id)}>
+            <Button
+              disabled={row.role === "admin" ? true : false}
+              type="primary"
+              danger
+              onClick={() => handleDelete(id)}
+            >
               Delete
             </Button>
           )}
@@ -196,6 +245,27 @@ const UsersPage = () => {
               onChange={handleSearch}
               style={{ width: "auto", flexGrow: 1 }}
               placeholder="Searching..."
+            />
+            <Select
+              defaultValue="All"
+              style={{
+                width: 120,
+              }}
+              onChange={handleChange}
+              options={[
+                {
+                  value: "all",
+                  label: "All role",
+                },
+                {
+                  value: "client",
+                  label: "Clients role",
+                },
+                {
+                  value: "user",
+                  label: "Users role",
+                },
+              ]}
             />
             <Button onClick={showModal} type="dashed">
               Add user
@@ -238,21 +308,22 @@ const UsersPage = () => {
           form={form}
         >
           <Upload
-            name="avatar"
+            name="image"
             listType="picture-card"
-            className="avatar-uploader"
+            className="image-uploader"
             showUploadList={false}
             onChange={handlePhoto}
           >
             {photo ? (
-              <img
+              <LazyLoadImage
+                effect="blur"
                 style={{
                   width: "100%",
-                  height: "100%",
+                  height: "378px",
                   objectFit: "cover",
                 }}
                 src={userImage(photo)}
-                alt="avatar"
+                alt="image"
               />
             ) : (
               <div>
@@ -262,7 +333,11 @@ const UsersPage = () => {
                     marginTop: 8,
                   }}
                 >
-                  {selected === null ? "Add photo" : "Change photo"}
+                  {photoLoading
+                    ? "Loading..."
+                    : selected === null
+                    ? "Add photo"
+                    : "Change photo"}
                 </div>
               </div>
             )}

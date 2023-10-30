@@ -5,10 +5,10 @@ export const userQuery = createQuery({
 
   endpoints: (builder) => ({
     getUsers: builder.query({
-      query: (params) => ({
+      query: ({ page, search, role }) => ({
         method: "GET",
         url: "users",
-        params,
+        params: { page, search, role },
       }),
       transformResponse: (res) => ({
         users: res.data.map((el) => ({ ...el, key: el._id })),
@@ -33,6 +33,15 @@ export const userQuery = createQuery({
       query: (id) => ({
         method: "GET",
         url: `users/${id}`,
+      }),
+    }),
+    changeRoleUsers: builder.mutation({
+      query: ({ id, body }) => ({
+        method: "PUT",
+        url: `users/${id}`,
+        body: {
+          role: body,
+        },
       }),
     }),
     updateUsers: builder.mutation({
@@ -62,4 +71,5 @@ export const {
   useUpdateUsersMutation,
   useDeleteUsersMutation,
   useUploadPhotoMutation,
+  useChangeRoleUsersMutation,
 } = userQuery;
