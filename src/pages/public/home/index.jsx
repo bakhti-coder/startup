@@ -1,7 +1,9 @@
+import "./style.scss";
+
 const HomePage = () => {
   return (
-    <section>
-      <h1>Portfolio</h1>
+    <section className="home">
+      <div></div>
     </section>
   );
 };

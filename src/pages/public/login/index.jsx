@@ -22,9 +22,14 @@ const LoginPage = () => {
         data: { token, user },
       } = await request.post("auth/login", values);
 
+      if (user.role === "user") {
+        navigate("/account");
+      } else {
+        navigate("/dashboard");
+      }
+
       Cookies.set(TOKEN, token);
       localStorage.setItem(USER, JSON.stringify(user));
-      navigate("/dashboard");
 
       dispatch(setAuth(user));
       message.success("Success login");

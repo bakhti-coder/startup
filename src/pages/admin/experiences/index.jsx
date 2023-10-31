@@ -19,11 +19,12 @@ import {
   useGetOneExperiencesMutation,
   useUpdateExperiencesMutation,
 } from "../../../redux/queries/experience";
-import { LIMIT } from "../../../constants";
+import { EXPERIENCETOTAL, LIMIT } from "../../../constants";
+import Cookies from "js-cookie";
 
 const ExperiencesPage = () => {
   const [form] = Form.useForm();
-  
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const [search, setSearch] = useState("");
@@ -39,6 +40,8 @@ const ExperiencesPage = () => {
     isFetching,
     refetch,
   } = useGetExperiencesQuery({ page, search });
+
+  Cookies.set(EXPERIENCETOTAL, total);
 
   const [createExperiences] = useCreateExperiencesMutation();
   const [getOneExperiences] = useGetOneExperiencesMutation();

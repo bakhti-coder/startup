@@ -14,7 +14,7 @@ import {
   Select,
 } from "antd";
 
-import { LIMIT } from "../../../constants";
+import { LIMIT, USERTOTAL } from "../../../constants";
 import {
   useChangeRoleUsersMutation,
   useCreateUsersMutation,
@@ -29,6 +29,7 @@ import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import "./style.scss";
+import Cookies from "js-cookie";
 
 const UsersPage = () => {
   const [form] = Form.useForm();
@@ -57,6 +58,7 @@ const UsersPage = () => {
     search,
     role: role !== "all" ? role : undefined,
   });
+  Cookies.set(USERTOTAL, total);
 
   const [createUsers] = useCreateUsersMutation();
   const [getOneUsers] = useGetOneUsersMutation();

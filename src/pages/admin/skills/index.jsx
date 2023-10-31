@@ -10,7 +10,7 @@ import {
   Space,
   Table,
 } from "antd";
-import { LIMIT } from "../../../constants";
+import { LIMIT, SKILLSTOTAL } from "../../../constants";
 import {
   addSkill,
   deleteSkill,
@@ -19,12 +19,15 @@ import {
   skillName,
   updateSkill,
 } from "../../../redux/slices/skill";
+import Cookies from "js-cookie";
 
 const SkillsPage = () => {
   const dispatch = useDispatch();
   const { skills, loading, total, isModalLoading } = useSelector(
     (state) => state[skillName]
   );
+  Cookies.set(SKILLSTOTAL, total);
+
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -110,7 +113,7 @@ const SkillsPage = () => {
       ),
     },
   ];
-  
+
   return (
     <Fragment>
       <Table

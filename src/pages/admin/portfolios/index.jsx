@@ -25,7 +25,8 @@ import TextArea from "antd/es/input/TextArea";
 import request from "../../../server";
 import { getImage } from "../../../utils/getImage";
 import { LoadingOutlined, PlusOutlined } from "@ant-design/icons";
-import { LIMIT } from "../../../constants";
+import { LIMIT, PORTFOLIOSTOTAL } from "../../../constants";
+import Cookies from "js-cookie";
 
 const PortfoliosPage = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,9 @@ const PortfoliosPage = () => {
   const { portfolios, loading, total, isModalLoading } = useSelector(
     (state) => state[portfolioName]
   );
+
+  Cookies.set(PORTFOLIOSTOTAL, total);
+
 
   const [form] = Form.useForm();
   const [isModalOpen, setIsModalOpen] = useState(false);

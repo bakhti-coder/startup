@@ -10,6 +10,7 @@ import {
   PieChartOutlined,
   ThunderboltOutlined,
   UserOutlined,
+  MessageOutlined,
 } from "@ant-design/icons";
 
 import { Layout, Menu, Button, theme, Modal } from "antd";
@@ -69,6 +70,11 @@ const AdminLayout = () => {
               key: "/education",
               icon: <BookOutlined />,
               label: <Link to="/education">Education</Link>,
+            },
+            {
+              key: "/messages",
+              icon: <MessageOutlined />,
+              label: <Link to="/messages">Messages</Link>,
             },
             {
               icon: <LogoutOutlined />,
