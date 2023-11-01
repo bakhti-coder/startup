@@ -1,6 +1,6 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
- 
+
 import { authName } from "./redux/slices/auth";
 
 import AdminLayout from "./components/layout/admin";
@@ -18,6 +18,7 @@ import UsersPage from "./pages/admin/users";
 import AccountPage from "./pages/account";
 import AdminAccountPage from "./pages/admin/account";
 import MessagesPage from "./pages/admin/messages";
+import FrontMessagesPage from "./pages/public/messages";
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state[authName]);
@@ -34,6 +35,12 @@ function App() {
             path="/account"
             element={
               isAuthenticated ? <AccountPage /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/messagess"
+            element={
+              isAuthenticated ? <FrontMessagesPage /> : <Navigate to="/login" />
             }
           />
         </Route>

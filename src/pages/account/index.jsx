@@ -14,6 +14,10 @@ import {
 import { userImage } from "../../utils/getImage";
 import Loading from "../../components/shared/Loading";
 import { message } from "antd";
+import { useDispatch } from "react-redux";
+import Cookies from "js-cookie";
+import { TOKEN, USER } from "../../constants";
+import { removeAuth } from "../../redux/slices/auth";
 
 const schema = yup
   .object({
@@ -26,6 +30,8 @@ const schema = yup
   .required();
 
 const AccountPage = () => {
+  const dispatch = useDispatch();
+
   const [photo, setPhoto] = useState(null);
   const [editLoading, setEditLoading] = useState(false);
   const [passwordEditLoading, setPasswordEditLoading] = useState(false);
@@ -114,6 +120,12 @@ const AccountPage = () => {
     } finally {
       setEditLoading(false);
     }
+  };
+
+  const heandleLogOut = () => {
+    Cookies.remove(TOKEN);
+    localStorage.removeItem(USER);
+    dispatch(removeAuth());
   };
 
   return (
@@ -430,14 +442,14 @@ const AccountPage = () => {
             </TabPanel>
           </Tabs>
         )}
-        {/* 
+
         <button
           style={{ marginTop: "40px" }}
-          onClick={() => logOut(navigate)}
+          onClick={heandleLogOut}
           className="auth__button"
         >
           Logout
-        </button> */}
+        </button>
       </div>
     </section>
   );
